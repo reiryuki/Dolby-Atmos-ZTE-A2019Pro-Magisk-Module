@@ -66,7 +66,7 @@ if [ "$IS64BIT" == true ]; then
 else
   ui_print "- 32 bit architecture"
   cp -rf $MODPATH/system_32/* $MODPATH/system
-  rm -rf `find $MODPATH -type d -name *64`
+  rm -rf `find $MODPATH -type d -name *64*`
   ui_print " "
 fi
 rm -rf $MODPATH/system_32
@@ -367,47 +367,58 @@ if echo $MAGISK_VER | grep -Eq 'delta|Delta|kitsune'\
     MOUNT=`mount | grep $MAGISKTMP/preinit`
     BLOCK=`echo $MOUNT | sed 's| on.*||g'`
     DIR=`mount | sed "s|$MOUNT||g" | grep -m 1 $BLOCK`
-    EIMDIR=`echo $DIR | sed "s|$BLOCK on ||g" | sed 's| type.*||g'`/early-mount.d
-  elif ! $ISENCRYPTED; then
-    EIMDIR=/data/adb/early-mount.d
-  elif [ -d /data/unencrypted ]\
-  && ! grep ' /data ' /proc/mounts | grep -q dm-\
-  && grep ' /data ' /proc/mounts | grep -q ext4; then
-    EIMDIR=/data/unencrypted/early-mount.d
-  elif grep ' /cache ' /proc/mounts | grep -q ext4; then
-    EIMDIR=/cache/early-mount.d
-  elif grep ' /metadata ' /proc/mounts | grep -q ext4; then
-    EIMDIR=/metadata/early-mount.d
-  elif grep ' /persist ' /proc/mounts | grep -q ext4; then
-    EIMDIR=/persist/early-mount.d
-  elif grep ' /mnt/vendor/persist ' /proc/mounts | grep -q ext4; then
-    EIMDIR=/mnt/vendor/persist/early-mount.d
-  elif grep ' /cust ' /proc/mounts | grep -q ext4; then
-    EIMDIR=/cust/early-mount.d
-  elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
-  && [ -d /data/unencrypted ]\
-  && ! grep ' /data ' /proc/mounts | grep -q dm-\
-  && grep ' /data ' /proc/mounts | grep -q f2fs; then
-    EIMDIR=/data/unencrypted/early-mount.d
-  elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
-  && grep ' /cache ' /proc/mounts | grep -q f2fs; then
-    EIMDIR=/cache/early-mount.d
-  elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
-  && grep ' /metadata ' /proc/mounts | grep -q f2fs; then
-    EIMDIR=/metadata/early-mount.d
-  elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
-  && grep ' /persist ' /proc/mounts | grep -q f2fs; then
-    EIMDIR=/persist/early-mount.d
-  elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
-  && grep ' /mnt/vendor/persist ' /proc/mounts | grep -q f2fs; then
-    EIMDIR=/mnt/vendor/persist/early-mount.d
-  elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
-  && grep ' /cust ' /proc/mounts | grep -q f2fs; then
-    EIMDIR=/cust/early-mount.d
-  else
-    EIM=false
-    ui_print "- Unable to find early init mount directory"
-    ui_print " "
+    DIR=`echo $DIR | sed "s|$BLOCK on ||g" | sed 's| type.*||g'`
+    if [ "$DIR" ]; then
+      EIMDIR=$DIR/early-mount.d
+    else
+      ui_print "! It seems Magisk early init mount directory is not"
+      ui_print "  activated yet. Please reinstall Magisk.zip via Magisk app"
+      ui_print "  (not via Recovery)."
+      ui_print " "
+    fi
+  fi
+  if [ ! "$EIMDIR" ]; then
+    if ! $ISENCRYPTED; then
+      EIMDIR=/data/adb/early-mount.d
+    elif [ -d /data/unencrypted ]\
+    && ! grep ' /data ' /proc/mounts | grep -q dm-\
+    && grep ' /data ' /proc/mounts | grep -q ext4; then
+      EIMDIR=/data/unencrypted/early-mount.d
+    elif grep ' /cache ' /proc/mounts | grep -q ext4; then
+      EIMDIR=/cache/early-mount.d
+    elif grep ' /metadata ' /proc/mounts | grep -q ext4; then
+      EIMDIR=/metadata/early-mount.d
+    elif grep ' /persist ' /proc/mounts | grep -q ext4; then
+      EIMDIR=/persist/early-mount.d
+    elif grep ' /mnt/vendor/persist ' /proc/mounts | grep -q ext4; then
+      EIMDIR=/mnt/vendor/persist/early-mount.d
+    elif grep ' /cust ' /proc/mounts | grep -q ext4; then
+      EIMDIR=/cust/early-mount.d
+    elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
+    && [ -d /data/unencrypted ]\
+    && ! grep ' /data ' /proc/mounts | grep -q dm-\
+    && grep ' /data ' /proc/mounts | grep -q f2fs; then
+      EIMDIR=/data/unencrypted/early-mount.d
+    elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
+    && grep ' /cache ' /proc/mounts | grep -q f2fs; then
+      EIMDIR=/cache/early-mount.d
+    elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
+    && grep ' /metadata ' /proc/mounts | grep -q f2fs; then
+      EIMDIR=/metadata/early-mount.d
+    elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
+    && grep ' /persist ' /proc/mounts | grep -q f2fs; then
+      EIMDIR=/persist/early-mount.d
+    elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
+    && grep ' /mnt/vendor/persist ' /proc/mounts | grep -q f2fs; then
+      EIMDIR=/mnt/vendor/persist/early-mount.d
+    elif [ "$MAGISK_VER_CODE" -ge 26000 ]\
+    && grep ' /cust ' /proc/mounts | grep -q f2fs; then
+      EIMDIR=/cust/early-mount.d
+    else
+      EIM=false
+      ui_print "- Unable to find early init mount directory"
+      ui_print " "
+    fi
   fi
   if [ -d ${EIMDIR%/early-mount.d} ]; then
     mkdir -p $EIMDIR
@@ -769,12 +780,13 @@ fi
 # settings
 FILE=$MODPATH/system/vendor/etc/dolby/dap-default.xml
 PROP=`grep_prop dolby.bass $OPTIONALS`
-if [ "$PROP" == def ]; then
-  ui_print "- Using default settings of bass-enhancer"
-elif [ "$PROP" == true ]; then
+if [ "$PROP" == true ]; then
   ui_print "- Changing all bass-enhancer-enable value to true"
   sed -i 's|bass-enhancer-enable value="false"|bass-enhancer-enable value="true"|g' $FILE
-elif [ "$PROP" ] && [ "$PROP" != false ] && [ "$PROP" -gt 0 ]; then
+elif [ "$PROP" == false ]; then
+  ui_print "- Changing all bass-enhancer-enable value to false"
+  sed -i 's|bass-enhancer-enable value="true"|bass-enhancer-enable value="false"|g' $FILE
+elif [ "$PROP" ] && [ "$PROP" != def ] && [ "$PROP" -gt 0 ]; then
   ui_print "- Changing all bass-enhancer-enable value to true"
   sed -i 's|bass-enhancer-enable value="false"|bass-enhancer-enable value="true"|g' $FILE
   ROWS=`grep bass-enhancer-boost $FILE | sed -e 's|<bass-enhancer-boost value="||g' -e 's|"/>||g'`
@@ -784,9 +796,6 @@ elif [ "$PROP" ] && [ "$PROP" != false ] && [ "$PROP" -gt 0 ]; then
   for ROW in $ROWS; do
     sed -i "s|bass-enhancer-boost value=\"$ROW\"|bass-enhancer-boost value=\"$PROP\"|g" $FILE
   done
-else
-  ui_print "- Changing all bass-enhancer-enable value to false"
-  sed -i 's|bass-enhancer-enable value="true"|bass-enhancer-enable value="false"|g' $FILE
 fi
 if [ "`grep_prop dolby.virtualizer $OPTIONALS`" == 1 ]; then
   ui_print "- Changing all virtualizer-enable value to true"
@@ -828,6 +837,27 @@ if [ "`grep_prop dolby.deepbass $OPTIONALS`" == 1 ]; then
   sed -i 's|frequency="19688"|frequency="13875"|g' $FILE
 fi
 ui_print " "
+
+# function
+rename_file() {
+if [ -f $FILE ]; then
+  ui_print "- Renaming"
+  ui_print "$FILE"
+  ui_print "  to"
+  ui_print "$MODFILE"
+  mv -f $FILE $MODFILE
+  ui_print " "
+fi
+}
+change_name() {
+if grep -q $NAME $FILE; then
+  ui_print "- Changing $NAME to $NAME2 at"
+  ui_print "$FILE"
+  ui_print "  Please wait..."
+  sed -i "s|$NAME|$NAME2|g" $FILE
+  ui_print " "
+fi
+}
 
 # mod
 if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
