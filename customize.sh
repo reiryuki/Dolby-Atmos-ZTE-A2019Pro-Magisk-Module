@@ -60,7 +60,8 @@ if [ "$IS64BIT" == true ]; then
     ui_print "- 32 bit library support"
   else
     ui_print "- Doesn't support 32 bit library"
-    rm -rf $MODPATH/system*/lib $MODPATH/system*/vendor/lib
+    rm -rf $MODPATH/armeabi-v7a $MODPATH/x86\
+     $MODPATH/system*/lib $MODPATH/system*/vendor/lib
   fi
   ui_print " "
 else
@@ -490,6 +491,7 @@ if [ "$LIST32BIT" ]; then
   DIR=/lib
   run_find_file
 fi
+sed -i 's|^install.hwlib=1|install.hwlib=0|g' $OPTIONALS
 }
 patch_manifest_eim() {
 if [ $EIM == true ]; then
@@ -921,12 +923,12 @@ done
 # check
 if [ "$IS64BIT" == true ]; then
   FILES=/lib64/libstagefrightdolby.so
-#  file_check_vendor
+  file_check_vendor
 fi
 if [ "$LIST32BIT" ]; then
   FILES="/lib/libstagefrightdolby.so
          /lib/libstagefright_soft_ddpdec.so"
-#  file_check_vendor
+  file_check_vendor
 fi
 
 # vendor_overlay
