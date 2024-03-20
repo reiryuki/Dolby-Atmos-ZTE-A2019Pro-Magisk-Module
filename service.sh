@@ -11,6 +11,7 @@ API=`getprop ro.build.version.sdk`
 # property
 resetprop -n ro.audio.ignore_effects false
 resetprop -n ro.feature.dolby_enable true
+resetprop -n ro.dolby.music_stream false
 resetprop -n vendor.audio.dolby.ds2.enabled false
 resetprop -n vendor.audio.dolby.ds2.hardbypass false
 
