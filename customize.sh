@@ -71,7 +71,6 @@ else
   rm -rf `find $MODPATH -type d -name *64*`
   ui_print " "
 fi
-rm -rf $MODPATH/system_32
 
 # sdk
 NUM=28
@@ -166,7 +165,6 @@ if [ "$LIST32BIT" ]; then
   DIR=/lib
   find_file
 fi
-rm -rf $MODPATH/system_support
 
 # sepolicy
 FILE=$MODPATH/sepolicy.rule
@@ -207,7 +205,6 @@ if [ "$MOD_UI" != true ] && [ "$PROP" ]\
   cp -rf $MODPATH/system_36dB/* $MODPATH/system
   ui_print " "
 fi
-rm -rf $MODPATH/system_36dB
 
 # cleaning
 ui_print "- Cleaning..."
@@ -221,7 +218,8 @@ if [ "$BOOTMODE" == true ]; then
   done
 fi
 rm -f /data/vendor/dolby/dap_sqlite3.db
-rm -rf $MODPATH/unused
+rm -rf $MODPATH/system_32 $MODPATH/system_support\
+ $MODPATH/system_36dB $MODPATH/unused
 remove_sepolicy_rule
 ui_print " "
 
@@ -241,12 +239,12 @@ for NAME in $NAMES; do
     sh $FILE
     rm -f $FILE
   fi
-  rm -rf /metadata/magisk/$NAME
-  rm -rf /mnt/vendor/persist/magisk/$NAME
-  rm -rf /persist/magisk/$NAME
-  rm -rf /data/unencrypted/magisk/$NAME
-  rm -rf /cache/magisk/$NAME
-  rm -rf /cust/magisk/$NAME
+  rm -rf /metadata/magisk/$NAME\
+   /mnt/vendor/persist/magisk/$NAME\
+   /persist/magisk/$NAME\
+   /data/unencrypted/magisk/$NAME\
+   /cache/magisk/$NAME\
+   /cust/magisk/$NAME
 done
 }
 
@@ -768,46 +766,6 @@ fi
 ui_print " "
 
 # function
-rename_file() {
-if [ -f $FILE ]; then
-  ui_print "- Renaming"
-  ui_print "$FILE"
-  ui_print "  to"
-  ui_print "$MODFILE"
-  mv -f $FILE $MODFILE
-  ui_print " "
-fi
-}
-change_name() {
-if grep -q $NAME $FILE; then
-  ui_print "- Changing $NAME to $NAME2 at"
-  ui_print "$FILE"
-  ui_print "  Please wait..."
-  sed -i "s|$NAME|$NAME2|g" $FILE
-  ui_print " "
-fi
-}
-
-# mod
-if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
-  NAME=libdlbdsservice.so
-  NAME2=libdapdsservice.so
-  if [ "$IS64BIT" == true ]; then
-    FILE=$MODPATH/system/vendor/lib64/$NAME
-    MODFILE=$MODPATH/system/vendor/lib64/$NAME2
-    rename_file
-  else
-    FILE=$MODPATH/system/vendor/lib/$NAME
-    MODFILE=$MODPATH/system/vendor/lib/$NAME2
-    rename_file
-  fi
-  FILE="$MODPATH/system/vendor/lib*/$NAME2
-$MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
-$MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service"
-  change_name
-fi
-
-# function
 file_check_vendor() {
 for FILE in $FILES; do
   DES=$VENDOR$FILE
@@ -829,6 +787,64 @@ if [ "$LIST32BIT" ]; then
   FILES="/lib/libstagefrightdolby.so
          /lib/libstagefright_soft_ddpdec.so"
   file_check_vendor
+fi
+
+# function
+rename_file() {
+if [ -f $FILE ]; then
+  ui_print "- Renaming"
+  ui_print "$FILE"
+  ui_print "  to"
+  ui_print "$MODFILE"
+  mv -f $FILE $MODFILE
+  ui_print " "
+fi
+}
+change_name() {
+if grep -q $NAME $FILE; then
+  ui_print "- Changing $NAME to $NAME2 at"
+  ui_print "$FILE"
+  ui_print "  Please wait..."
+  sed -i "s|$NAME|$NAME2|g" $FILE
+  ui_print " "
+fi
+}
+
+# mod
+NAME=libstagefright_foundation.so
+NAME2=libstagefright_fdtn_dolby.so
+if [ "$IS64BIT" == true ]; then
+  FILE=$MODPATH/system/vendor/lib64/$NAME
+  MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+  rename_file
+fi
+if [ "$LIST32BIT" ]; then
+  FILE=$MODPATH/system/vendor/lib/$NAME
+  MODFILE=$MODPATH/system/vendor/lib/$NAME2
+  rename_file
+fi
+FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/lib*/libdlbdsservice.so
+$MODPATH/system/vendor/lib*/libstagefrightdolby.so
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
+#$MODPATH/system/vendor/lib*/libstagefright_soft_ac4dec.so
+change_name
+if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
+  NAME=libdlbdsservice.so
+  NAME2=libdapdsservice.so
+  if [ "$IS64BIT" == true ]; then
+    FILE=$MODPATH/system/vendor/lib64/$NAME
+    MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+    rename_file
+  else
+    FILE=$MODPATH/system/vendor/lib/$NAME
+    MODFILE=$MODPATH/system/vendor/lib/$NAME2
+    rename_file
+  fi
+  FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
+$MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service"
+  change_name
 fi
 
 # fix sensor
