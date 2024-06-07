@@ -786,6 +786,8 @@ done
 }
 
 # check
+FILES=/etc/media_codecs_dolby_audio.xml
+file_check_vendor
 if [ "$IS64BIT" == true ]; then
   FILES=/lib64/libstagefrightdolby.so
   file_check_vendor
