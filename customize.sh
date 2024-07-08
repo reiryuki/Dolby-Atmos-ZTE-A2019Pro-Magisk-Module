@@ -820,6 +820,21 @@ fi
 }
 
 # mod
+NAME=libhidlbase.so
+NAME2=libhidldlbs.so
+if [ "$IS64BIT" == true ]; then
+  FILE=$MODPATH/system/lib64/$NAME
+  MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+  rename_file
+fi
+if [ "$LIST32BIT" ]; then
+  FILE=$MODPATH/system/lib/$NAME
+  MODFILE=$MODPATH/system/vendor/lib/$NAME2
+  rename_file
+fi
+FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/lib*/vendor.dolby.hardware.dms@1.0.so"
+change_name
 NAME=libstagefright_foundation.so
 NAME2=libstagefright_fdtn_dolby.so
 if [ "$IS64BIT" == true ]; then
