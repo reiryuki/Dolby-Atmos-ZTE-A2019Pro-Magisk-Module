@@ -1,8 +1,8 @@
 id=DolbyAtmos
 name=Dolby Atmos ZTE A2019 Pro
-version=v9.8-R
-versionCode=98
+version=v9.9
+versionCode=99
 author=Rei Ryuki the Fixer
-description=An equalizer global type sound effect ported from ZTE A2019 Pro (P845A02) for any Android 9 and up.
+description=Equalizer global type sound effect ported from ZTE A2019 Pro (P845A02) for any Android 9 (SDK 28) and up, ARM64 or ARM architecture.
 
 
