@@ -54,7 +54,7 @@
 - https://t.me/androidryukimodsdiscussions/2618
 
 ## Credits and Contributors
-- @guitardedhero
+- Lennon
 - @HuskyDG
 - https://t.me/viperatmos
 - https://t.me/androidryukimodsdiscussions
