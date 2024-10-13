@@ -14,13 +14,13 @@
 - Dolby Atmos RC4 & RC1 debug 2.2b Magisk Module by Lennon
 - system_32: https://dumps.tadiphone.dev/dumps/lenovo/7305i full_mt8321_GO-user-9-PPR1.180610.011-18-release-keys
 - system_support: CrDroid ROM Android 13
-- libmagiskpolicy.so: Kitsune Mask R65C33E4F
+- libmagiskpolicy.so: Kitsune Mask R6687BB53
 
 ## Screenshots
 - https://t.me/androidryukimodsdiscussions/66074
 
 ## Requirements
-- ARM64 or ARM architecture
+- arm64-v8a or armeabi-v7a architecture
 - Android 9 (SDK 28) and up
 - Magisk or KernelSU installed (Recommended to use Magisk Delta/Kitsune Mask for systemless early init mount manifest.xml if your ROM is Read-Only https://t.me/androidryukimodsdiscussions/100091)
 
