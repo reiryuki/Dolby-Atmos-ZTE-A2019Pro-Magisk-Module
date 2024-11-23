@@ -82,7 +82,7 @@ NAME2=armeabi-v7a
 if ! echo "$ABILIST" | grep -q $NAME; then
   if echo "$ABILIST" | grep -q $NAME2; then
     cp -rf $MODPATH/system_32/* $MODPATH/system
-    rm -rf `find $MODPATH -type d -name *64*`
+    rm -rf `find $MODPATH/system -type d -name *64*`
   else
     if [ "$BOOTMODE" == true ]; then
       ui_print "! This ROM doesn't support $NAME nor $NAME2 architecture"
@@ -127,6 +127,26 @@ PRODUCT=`realpath $MIRROR/product`
 SYSTEM_EXT=`realpath $MIRROR/system_ext`
 ODM=`realpath $MIRROR/odm`
 MY_PRODUCT=`realpath $MIRROR/my_product`
+
+# create
+mkdir -p $MODPATH/system/etc/vintf
+NAMES=vendor.dolby.hardware.dms@2.0-service
+for NAME in $NAMES; do
+  if [ -f $VENDOR/bin/hw/$NAME ]; then
+    touch $MODPATH/system/vendor/bin/hw/$NAME
+  fi
+done
+if [ -d $ODM/bin/hw ] || [ -d $VENDOR/odm/bin/hw ]; then
+  mkdir -p $MODPATH/system/vendor/odm/bin/hw
+fi
+NAMES="vendor.dolby.hardware.dms@1.0-service
+       vendor.dolby.hardware.dms@2.0-service"
+for NAME in $NAMES; do
+  if [ -f $ODM/bin/hw/$NAME ]\
+  || [ -f $VENDOR/odm/bin/hw/$NAME ]; then
+    touch $MODPATH/system/vendor/odm/bin/hw/$NAME
+  fi
+done
 
 # check
 FILE=/bin/hw/vendor.dolby.media.c2@1.0-service
@@ -655,7 +675,7 @@ if echo "$PROP" | grep -q m; then
   sed -i 's|#m||g' $FILE
   sed -i 's|musicstream=|musicstream=true|g' $MODPATH/acdb.conf
   sed -i 's|music_stream false|music_stream true|g' $MODPATH/service.sh
-  ui_print "  Sound FX will always be enabled"
+  ui_print "  The sound effect will always be enabled"
   ui_print "  and cannot be disabled by on/off togglers"
   ui_print " "
 else
@@ -722,14 +742,11 @@ if echo "$PROP" | grep -q c; then
   sed -i 's|#c||g' $FILE
   ui_print " "
 fi
-if echo "$PROP" | grep -q p; then
-  ui_print "- Activating patch stream..."
+if [ "`grep_prop dolby.game $OPTIONALS`" != 0 ]; then
   sed -i 's|#p||g' $FILE
-  ui_print " "
-fi
-if echo "$PROP" | grep -q g; then
-  ui_print "- Activating rerouting stream..."
   sed -i 's|#g||g' $FILE
+else
+  ui_print "- Does not use Dolby Game patch & rerouting stream"
   ui_print " "
 fi
 
@@ -848,23 +865,25 @@ fi
 }
 
 # mod
-NAME=libhidlbase.so
-NAME2=libhidldlbs.so
-if [ "$IS64BIT" == true ]; then
-  FILE=$MODPATH/system/lib64/$NAME
-  MODFILE=$MODPATH/system/vendor/lib64/$NAME2
-  rename_file
-fi
-if [ "$ABILIST32" ]; then
-  FILE=$MODPATH/system/lib/$NAME
-  MODFILE=$MODPATH/system/vendor/lib/$NAME2
-  rename_file
-fi
-if [ -f $MODPATH/system/vendor/lib64/$NAME2 ]\
-|| [ -f $MODPATH/system/vendor/lib/$NAME2 ]; then
+if grep -q libvndksupport.so /system/etc/*.txt; then
+  NAME=libhidlbase.so
+  NAME2=libhidldlbs.so
+  if [ "$IS64BIT" == true ]; then
+    FILE=$MODPATH/system/lib64/$NAME
+    MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+    rename_file
+  fi
+  if [ "$ABILIST32" ]; then
+    FILE=$MODPATH/system/lib/$NAME
+    MODFILE=$MODPATH/system/vendor/lib/$NAME2
+    rename_file
+  fi
+  if [ -f $MODPATH/system/vendor/lib64/$NAME2 ]\
+  || [ -f $MODPATH/system/vendor/lib/$NAME2 ]; then
   FILE="$MODPATH/system/vendor/lib*/$NAME2
 $MODPATH/system/vendor/lib*/vendor.dolby.hardware.dms@1.0.so"
-  change_name
+    change_name
+  fi
 fi
 NAME=libstagefright_foundation.so
 NAME2=libstagefright_fdtn_dolby.so
