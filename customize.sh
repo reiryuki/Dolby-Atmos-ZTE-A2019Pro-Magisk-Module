@@ -816,6 +816,32 @@ fi
 ui_print " "
 
 # function
+file_check_apex_for_vendor() {
+for FILE in $FILES; do
+  DESS="/apex$FILE $SYSTEM/apex$FILE"
+  for DES in $DESS; do
+    if [ -f $DES ]; then
+      ui_print "- Detected"
+      ui_print "$DES"
+      rm -f $MODPATH/system/vendor$FILE
+      ui_print " "
+    fi
+  done
+done
+}
+file_check_system_for_vendor() {
+for FILE in $FILES; do
+  DESS="$SYSTEM$FILE $SYSTEM_EXT$FILE"
+  for DES in $DESS; do
+    if [ -f $DES ]; then
+      ui_print "- Detected"
+      ui_print "$DES"
+      rm -f $MODPATH/system/vendor$FILE
+      ui_print " "
+    fi
+  done
+done
+}
 file_check_vendor() {
 for FILE in $FILES; do
   DESS="$VENDOR$FILE $ODM$FILE"
@@ -831,17 +857,27 @@ done
 }
 
 # check
-FILES=/etc/media_codecs_dolby_audio.xml
-file_check_vendor
 if [ "$IS64BIT" == true ]; then
-  FILES=/lib64/libstagefrightdolby.so
+  FILES=/*vndk*/lib64/libsqlite.so
+  file_check_apex_for_vendor
+  FILES=/lib64/vndk-*/libsqlite.so
+  file_check_system_for_vendor
+  FILES="/lib64/libsqlite.so
+         /lib64/libstagefrightdolby.so"
   file_check_vendor
 fi
 if [ "$ABILIST32" ]; then
-  FILES="/lib/libstagefrightdolby.so
+  FILES=/*vndk*/lib/libsqlite.so
+  file_check_apex_for_vendor
+  FILES=/lib/vndk-*/libsqlite.so
+  file_check_system_for_vendor
+  FILES="/lib/libsqlite.so
+         /lib/libstagefrightdolby.so
          /lib/libstagefright_soft_ddpdec.so"
   file_check_vendor
 fi
+FILES=/etc/media_codecs_dolby_audio.xml
+file_check_vendor
 
 # function
 rename_file() {
@@ -901,7 +937,6 @@ FILE="$MODPATH/system/vendor/lib*/$NAME2
 $MODPATH/system/vendor/lib*/libdlbdsservice.so
 $MODPATH/system/vendor/lib*/libstagefrightdolby.so
 $MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
-#$MODPATH/system/vendor/lib*/libstagefright_soft_ac4dec.so
 change_name
 if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
   NAME=libdlbdsservice.so
