@@ -135,7 +135,7 @@ if [ "`grep_prop dolby.32bit $OPTIONALS`" == 1 ]; then
   ARCH=arm
   ABI=armeabi-v7a
   IS64BIT=false
-  ABILIST=`echo "$ABILIST" | sed 's|arm64-v8a||g'`
+  ABILIST=`echo "$ABILIST" | sed -e 's|arm64-v8a,||g' -e 's|arm64-v8a||g'`
 fi
 
 # architecture
@@ -713,12 +713,12 @@ done
 
 # ui app
 if [ "$MOD_UI" != true ]\
-&& [ "`grep_prop dolby.rc1 $OPTIONALS`" == 1 ]; then
-  ui_print "- Using RC1 app instead of RC4"
-  APPS="DaxUI daxService"
+&& [ "`grep_prop dolby.razer $OPTIONALS`" == 1 ]; then
+  ui_print "- Using apps from Razer instead of the original one"
+  APPS=DolbyAtmos
   ui_print " "
 else
-  APPS=DolbyAtmos
+  APPS="DaxUI daxService"
 fi
 for APP in $APPS; do
   rm -rf `find $MODPATH/system -type d -name $APP`
@@ -1006,12 +1006,13 @@ $MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
 change_name
 if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
   NAME=libdlbdsservice.so
-  NAME2=libdapdsservice.so
+  NAME2=libatmosservice.so
   if [ "$IS64BIT" == true ]; then
     FILE=$MODPATH/system/vendor/lib64/$NAME
     MODFILE=$MODPATH/system/vendor/lib64/$NAME2
     rename_file
-  else
+  fi
+  if [ "$ABILIST32" ]; then
     FILE=$MODPATH/system/vendor/lib/$NAME
     MODFILE=$MODPATH/system/vendor/lib/$NAME2
     rename_file
@@ -1019,6 +1020,63 @@ if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
   FILE="$MODPATH/system/vendor/lib*/$NAME2
 $MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
 $MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service"
+  change_name
+  NAME=libdapparamstorage.so
+  NAME2=libdaxparamstorage.so
+  if [ "$IS64BIT" == true ]; then
+    FILE=$MODPATH/system/vendor/lib64/$NAME
+    MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+    rename_file
+  fi
+  if [ "$ABILIST32" ]; then
+    FILE=$MODPATH/system/vendor/lib/$NAME
+    MODFILE=$MODPATH/system/vendor/lib/$NAME2
+    rename_file
+  fi
+  FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/lib*/soundfx/libatmos.so
+$MODPATH/system/vendor/lib*/libatmosservice.so
+$MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
+$MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
+  change_name
+  NAME=vendor.dolby.hardware.dms@1.0.so
+  NAME2=vendor.atmos.hardware.dms@1.0.so
+  if [ "$IS64BIT" == true ]; then
+    FILE=$MODPATH/system/vendor/lib64/$NAME
+    MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+    rename_file
+  fi
+  if [ "$ABILIST32" ]; then
+    FILE=$MODPATH/system/vendor/lib/$NAME
+    MODFILE=$MODPATH/system/vendor/lib/$NAME2
+    rename_file
+  fi
+  FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/lib*/soundfx/libatmos.so
+$MODPATH/system/vendor/lib*/libatmosservice.so
+$MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
+$MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
+  change_name
+  NAME=vendor.dolby.hardware.dms@1.0-impl.so
+  NAME2=vendor.atmos.hardware.dms@1.0-impl.so
+  if [ "$IS64BIT" == true ]; then
+    FILE=$MODPATH/system/vendor/lib64/$NAME
+    MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+    rename_file
+  fi
+  if [ "$ABILIST32" ]; then
+    FILE=$MODPATH/system/vendor/lib/$NAME
+    MODFILE=$MODPATH/system/vendor/lib/$NAME2
+    rename_file
+  fi
+  FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service"
+  change_name
+  NAME=$'\xef\x93\x7f\x67\x55\x87'
+  NAME2=_ryuki
+  FILE=$MODPATH/system/vendor/lib*/soundfx/libatmos.so
   change_name
 fi
 
