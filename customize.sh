@@ -889,7 +889,12 @@ for FILE in $FILES; do
     if [ -f $DES ]; then
       ui_print "- Detected"
       ui_print "$DES"
-      rm -f $MODPATH/system/vendor$FILE
+      NAME=`basename $FILE`
+      if echo $FILE | grep -q lib64; then
+        rm -f $MODPATH/system/vendor/lib64/$NAME
+      else
+        rm -f $MODPATH/system/vendor/lib/$NAME
+      fi
       ui_print " "
     fi
   done
@@ -902,7 +907,12 @@ for FILE in $FILES; do
     if [ -f $DES ]; then
       ui_print "- Detected"
       ui_print "$DES"
-      rm -f $MODPATH/system/vendor$FILE
+      NAME=`basename $FILE`
+      if echo $FILE | grep -q lib64; then
+        rm -f $MODPATH/system/vendor/lib64/$NAME
+      else
+        rm -f $MODPATH/system/vendor/lib/$NAME
+      fi
       ui_print " "
     fi
   done
@@ -983,7 +993,7 @@ if grep -q libvndksupport.so /system/etc/*.txt; then
   if [ -f $MODPATH/system/vendor/lib64/$NAME2 ]\
   || [ -f $MODPATH/system/vendor/lib/$NAME2 ]; then
   FILE="$MODPATH/system/vendor/lib*/$NAME2
-$MODPATH/system/vendor/lib*/vendor.dolby.hardware.dms@1.0.so"
+$MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*.so"
     change_name
   fi
 fi
@@ -1000,9 +1010,9 @@ if [ "$ABILIST32" ]; then
   rename_file
 fi
 FILE="$MODPATH/system/vendor/lib*/$NAME2
-$MODPATH/system/vendor/lib*/libdlbdsservice.so
+$MODPATH/system/vendor/lib*/libdlbdsservice*.so
 $MODPATH/system/vendor/lib*/libstagefrightdolby.so
-$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec*.so"
 change_name
 if [ "`grep_prop dolby.mod $OPTIONALS`" != 0 ]; then
   NAME=libdlbdsservice.so
@@ -1038,7 +1048,7 @@ $MODPATH/system/vendor/lib*/soundfx/libatmos.so
 $MODPATH/system/vendor/lib*/libatmosservice.so
 $MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
 $MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service
-$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec*.so"
   change_name
   NAME=vendor.dolby.hardware.dms@1.0.so
   NAME2=vendor.atmos.hardware.dms@1.0.so
@@ -1057,7 +1067,7 @@ $MODPATH/system/vendor/lib*/soundfx/libatmos.so
 $MODPATH/system/vendor/lib*/libatmosservice.so
 $MODPATH/system/vendor/lib*/vendor.dolby*.hardware.dms*@*-impl.so
 $MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service
-$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so"
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec*.so"
   change_name
   NAME=vendor.dolby.hardware.dms@1.0-impl.so
   NAME2=vendor.atmos.hardware.dms@1.0-impl.so
