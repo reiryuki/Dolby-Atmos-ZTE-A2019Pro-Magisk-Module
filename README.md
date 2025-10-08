@@ -13,7 +13,8 @@
 - https://dumps.tadiphone.dev/dumps/zte/p845a02 sdm845-user-9-PKQ1.181105.001-559-release-keys
 - Dolby Atmos RC4 & RC1 debug 2.2b Magisk Module by Lennon
 - system_32: https://dumps.tadiphone.dev/dumps/lenovo/7305i full_mt8321_GO-user-9-PPR1.180610.011-18-release-keys
-- system_support: CrDroid ROM Android 13
+- libhidlbase.so, libhidltransport.so, & libhwbinder.so: CrDroid ROM Android 13
+- libutils.so: LineageOS 23 Android 16 BP2A.250605.031.A2 1758630651
 - libmagiskpolicy.so: Kitsune Mask R6687BB53
 
 ## Screenshots
