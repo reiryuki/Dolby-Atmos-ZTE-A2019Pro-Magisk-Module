@@ -15,7 +15,54 @@
 - system_32: https://dumps.tadiphone.dev/dumps/lenovo/7305i full_mt8321_GO-user-9-PPR1.180610.011-18-release-keys
 - libhidlbase.so, libhidltransport.so, & libhwbinder.so: CrDroid ROM Android 13
 - libutils.so: LineageOS 23 Android 16 BP2A.250605.031.A2 1758630651
-- libmagiskpolicy.so: Kitsune Mask R6687BB53
+- libmagiskpolicy.so: Magisk (stable) 30.7 (30700)
+
+## Changelog
+
+v1.1.1
+- Update libmagiskpolicy.so from Magisk (stable) 30.7 (30700) (fixes selinux denials in KernelSU)
+- Does not disable raw playback (You can use Audio Compatibility Patch Reborn Magisk Module instead)
+
+v1.1.0
+- Fix a crash in Miui ROM
+- Fix wrong target in latest KernelSU
+- Improve detections
+
+v1.0.9
+- Fix wrong manifest.xml location patch target in latest Magisk version
+
+v1.0.8
+- Tidy up aml.sh
+- Exclude \*audio\*effects\*haptic\*.xml
+- Fix wrong file permissions in some ROMs
+
+v1.0.7
+- Fix ZN7android8String16aSEOS0 function not found in some ROMs
+- Add libutils.so as system_support
+- Abort installation if fail to mount mirror system
+
+v1.0.6
+- Fake Kitsune Mask detection
+- Improve /odm and /my_product support detection
+
+v1.0.5
+- Fix script bug at installation for libsqlite.so detections
+- Fix selinux denials
+
+v1.0.4
+- Using original app by default
+- Remove dolby.rc1 optional
+- Add new optional
+- Modifies all blobs to fix conflict with in-built Dolby
+
+v1.0.3
+- Move DaxUI.apk to priv-app
+- Add Action button to clear apps caches
+- Fix architecture detection in some weird ROMs
+- Fix bug in uninstall.sh
+
+v1.0.2
+- Fix missing/unaccessible libsqlite.so in some Android 15 ROMs
 
 ## Screenshots
 - https://t.me/androidryukimodsdiscussions/66074
@@ -27,15 +74,15 @@
 - Magisk or Kitsune Mask or KernelSU or Apatch installed (Recommended to use Magisk Delta/Kitsune Mask for systemless early init mount manifest.xml if your ROM is Read-Only https://t.me/ryukinotes/49)
 
 ## WARNING!!!
-- Possibility of bootloop or even softbrick or a service failure on Read-Only ROM if you don't use Magisk Delta/Kitsune Mask.
+Possibility of bootloop or even softbrick or a service failure on Read-Only ROM if you don't use Magisk Delta/Kitsune Mask.
 
 ## Installation Guide & Download Link
 - Recommended to use Magisk Delta/Kitsune Mask https://t.me/ryukinotes/49
 - Remove any other else Dolby MAGISK MODULE with different name (no need to remove if it's the same name)
 - Reboot
-- If you are using KernelSU, you need to disable Unmount Modules by Default in KernelSU app settings and install https://github.com/KernelSU-Modules-Repo/meta-overlayfs first
+- If you are using KernelSU, you need to disable Unmount Modules by Default in KernelSU app settings and install https://github.com/KernelSU-Modules-Repo/meta-overlayfs or https://github.com/KernelSU-Modules-Repo/magic_mount_rs or https://github.com/KernelSU-Modules-Repo/hybrid_mount first depending on ROM compatibility
 - If you have Dolby in-built in your ROM, then you need to activate data.cleanup=1 at the first time install (READ Optionals bellow!)
-- Install this module https://www.pling.com/p/1531390/ via Magisk app or Kitsune Mask app or KernelSU app or Apatch app or Recovery if Magisk or Kitsune Mask installed
+- Install this module via Magisk app or Kitsune Mask app or KernelSU app or Apatch app or Recovery if Magisk or Kitsune Mask installed
 - Install AML Magisk Module https://t.me/ryukinotes/34 only if using any other else audio mod module
 - Reboot
 - If you are using KernelSU, you need to allow superuser list manually all package name listed in package.txt (and your home launcher app also) (enable show system apps) and reboot afterwards
@@ -65,6 +112,6 @@
 - You can contribute ideas about this Magisk Module here: https://t.me/androidappsportdevelopment
 
 ## Sponsors
-- https://t.me/ryukinotes/25
+https://t.me/ryukinotes/25
 
 
