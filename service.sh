@@ -142,7 +142,7 @@ fi
 
 # allow
 PKG=com.dolby.daxappui
-if appops get $PKG > /dev/null 2>&1; then
+if appops get $PKG >/dev/null 2>&1; then
   if [ "$API" -ge 30 ]; then
     appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
   fi
@@ -155,7 +155,7 @@ fi
 
 # allow
 PKG=com.dolby.daxservice
-if appops get $PKG > /dev/null 2>&1; then
+if appops get $PKG >/dev/null 2>&1; then
   if [ "$API" -ge 30 ]; then
     appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
   fi
@@ -171,7 +171,7 @@ fi
 
 # allow
 PKG=com.dolby.atmos
-if appops get $PKG > /dev/null 2>&1; then
+if appops get $PKG >/dev/null 2>&1; then
   if [ "$API" -ge 30 ]; then
     appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
   fi
