@@ -17,7 +17,7 @@
 - libmagiskpolicy.so: Magisk (debug) 31.0 (31000)
 
 ## Screenshots
-- https://t.me/androidryukimodsdiscussions/66074
+https://t.me/androidryukimodsdiscussions/66074
 
 ## Requirements
 - arm64-v8a or armeabi-v7a architecture
