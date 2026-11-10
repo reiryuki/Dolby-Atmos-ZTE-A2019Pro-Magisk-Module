@@ -27,7 +27,7 @@ https://t.me/androidryukimodsdiscussions/66074
 
 ## Download Links and Changelog
 
-v1.1.6 https://github.com/reiryuki/Dolby-Atmos-ZTE-A2019Pro-Magisk-Module
+v1.1.6 https://move2link.co/c4b2aa4
 - Update libmagiskpolicy.so from Magisk (debug) 31.0 (31000)
 - Add a new optional dolby.mod_xml to let users to use any modified/custom dap-default.xml. Please read Optionals below.
 
