@@ -27,7 +27,7 @@ https://t.me/androidryukimodsdiscussions/66074
 
 ## Download Links and Changelog
 
-v1.1.7 https://github.com/reiryuki/Dolby-Atmos-ZTE-A2019Pro-Magisk-Module
+v1.1.7 https://move2link.co/f50c8f6
 - Add a new optional dolby.bass_freq to change bass-enhancer-cutoff-frequency values. Please read Optionals below.
 - Fix sepolicy denials in Android 17
 
