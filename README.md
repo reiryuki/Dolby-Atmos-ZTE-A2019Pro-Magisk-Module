@@ -27,6 +27,10 @@ https://t.me/androidryukimodsdiscussions/66074
 
 ## Download Links and Changelog
 
+v1.1.7 https://github.com/reiryuki/Dolby-Atmos-ZTE-A2019Pro-Magisk-Module
+- Add a new optional dolby.bass_freq to change bass-enhancer-cutoff-frequency values. Please read Optionals below.
+- Fix sepolicy denials in Android 17
+
 v1.1.6 https://move2link.co/c4b2aa4
 - Update libmagiskpolicy.so from Magisk (debug) 31.0 (31000)
 - Add a new optional dolby.mod_xml to let users to use any modified/custom dap-default.xml. Please read Optionals below.
@@ -67,11 +71,6 @@ v1.0.8
 - Exclude \*audio\*effects\*haptic\*.xml
 - Fix wrong file permissions in some ROMs
 
-v1.0.7
-- Fix ZN7android8String16aSEOS0 function not found in some ROMs
-- Add libutils.so as system_support
-- Abort installation if fail to mount mirror system
-
 ## Download Tutorial
 https://t.me/ryukinotes/97
 
@@ -93,6 +92,7 @@ Possibility of bootloop or even softbrick or a service failure on Read-Only ROM 
 
 ## Optionals
 - https://t.me/ryukinotes/8
+- https://t.me/ryukinotes/101
 - Global: https://t.me/ryukinotes/35
 - Stream: https://t.me/ryukinotes/52
 
@@ -108,9 +108,9 @@ Possibility of bootloop or even softbrick or a service failure on Read-Only ROM 
 ## Credits and Contributors
 - Lennon
 - @HuskyDG
+- @HELLBOY017
 - https://t.me/viperatmos
 - https://t.me/androidryukimodsdiscussions
-- @HELLBOY017
 - https://t.me/androidappsportdevelopment
 
 ## Sponsors and Donation
